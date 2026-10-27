@@ -165,8 +165,6 @@ fn setup_camera_fog(
         Bloom::NATURAL,
         // Enables the atmosphere to drive reflections and ambient lighting (IBL) for this view
         AtmosphereEnvironmentMapLight::default(),
-        #[cfg(feature = "free_camera")]
-        FreeCamera::default(),
         VolumetricFog {
             ambient_intensity: 0.0,
             ..default()
@@ -175,6 +173,27 @@ fn setup_camera_fog(
         TemporalAntiAliasing::default(),
         ScreenSpaceReflections {
             min_perceptual_roughness: 0.0..0.0,
+            ..default()
+        },
+        Camera {
+            order: 0,
+            clear_color: ClearColorConfig::Custom(Color::BLACK),
+            ..default()
+        },
+    ));
+
+    commands.spawn((
+        Camera3d::default(),
+        #[cfg(feature = "free_camera")]
+        FreeCamera::default(),
+        Transform::from_xyz(-2.8, 0.045, 0.0).looking_at(Vec3::ZERO, Vec3::Y),
+        ScreenSpaceReflections {
+            min_perceptual_roughness: 0.0..0.0,
+            ..default()
+        },
+        Camera {
+            order: 1,
+            clear_color: ClearColorConfig::None,
             ..default()
         },
     ));
